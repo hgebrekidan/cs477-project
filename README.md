@@ -9,3 +9,4 @@
 
 ## Project Requirements
 Please see the [Requirement PDF File](https://github.com/bellaxing/cs477-project/blob/main/Project%20Requirements.pdf).
+## Day 1
