@@ -1,19 +1,21 @@
 const users = [];
-class User {
-    constructor(firstname, lastname, username, password, role){
-        this.firstname = firstname;
-        this.lastname = lastname;
+
+module.exports = class User {
+    constructor(username, password, role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
-    login(){
-        return users.find(user.username === this.username && user.password === this.password)
+
+    login() {
+        return users.find(u => { return u.username === this.username && u.password === this.password });
     }
     signup(){
-        const newuser = new User(this.firstname , this.lastname , this.username, this.password , this.role);
-        users.push(newuser);
+        const user=new(this.username,this.password,this.role);
+        users.push(user);
+    }
+    static init() {
+        users.push(new User('john', 'admin', 'admin'));
+        users.push(new User('bella', 'member', 'member'));
     }
 }
-
-module.exports = User;
