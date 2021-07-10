@@ -1,5 +1,5 @@
 let books = [];
-
+let counter = 1;
 module.exports = class Book {
 
     constructor(id, title, price, description) {
@@ -10,8 +10,9 @@ module.exports = class Book {
     }
 
     save() {
-        this.id = Math.random().toString();
+        this.id = counter;
         books.push(this);
+        counter++;
         return this;
     }
 
