@@ -8,15 +8,15 @@
   - Solomon Atsbeha
   - Mastewal Desta
   - Eyasu Gebrehiwot
-  - Simon Kiflay
+  - Franklin Leelabeing
   2. Status Report about your group project
   3. List each member’s tasks
-  - Hailemariam Gebrekidan  --
-  - Getachew Akalu  -- 
-  - Solomon Atsbeha  --
-  - Mastewal Desta  --
-  - Eyasu Gebrehiwot  --
-  - Simon Kiflay  --  
+  - Hailemariam Gebrekidan  -- models books/users and log in log out feature, conducting on git hub
+  - Getachew Akalu  -- authorization feature
+  - Solomon Atsbeha  -- authentication and 404 html page
+  - Mastewal Desta  -- overall project structure and shopping cart feature
+  - Eyasu Gebrehiwot  -- routes book/user and payment feature, conducting on git hub
+  - Franklin Leelabeing  --  controllers book/user sign up feature
 2. Source code or github link for your project repository
 
 ## Project Requirements
