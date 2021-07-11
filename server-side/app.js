@@ -9,9 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-
-
 app.use(authRouter);
 app.use('/books', bookRouter);
 
@@ -26,9 +23,6 @@ app.use((err, req, res, next) => {
         res.status(500).json({ error: 'Something is wrong! Try later' });
     }
 });
-
-
-
 
 
 mongoConnect(() => {
