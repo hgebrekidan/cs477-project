@@ -1,13 +1,16 @@
-const express = require('express')
+const express = require('express');
+const bookController = require('../controllers/bookController');
+
 const router = express.Router();
-const bookController = require('../controllers/bookController')
 
-router.get('/book/:bookId',bookController.getbookById)
-router.post('/book',bookController.saveBook);
+router.get('/', bookController.getBooks);
 
-router.get('/user/:uid/orders/:orderId',(req,res,next)=>{
-    console.log(rq.params)//{uid:12, orderId:567}
-})
+router.get('/:bookId', bookController.getBookById);
 
+router.post('/',  bookController.save);
+
+router.put('/:bookId', bookController.update);
+
+router.delete('/:bookId', bookController.deleteById);
 
 module.exports = router;
