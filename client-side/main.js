@@ -1,7 +1,3 @@
-/**
- * Naha just copied some codes from the demo. to see how it work. 
- */
-
 function displayHomePage() {
     document.getElementById('shopping').style.display = 'block';
     document.getElementById('loginForm').style.display = 'none';
@@ -10,15 +6,51 @@ function displayHomePage() {
     getProducts();
 }
 
+/*
+function displayHomePageForBuyer() {
+    document.getElementById('shopping').style.display = 'block';
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'block';
+    document.getElementById('loginErrorMsg').textContent = '';
+    getProductsForBuyer();
+}
+*/
+
 function displayLoginPage() {
     document.getElementById('shopping').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'none';
 }
 
+
+function displayHomePageForBuyer(){
+    document.getElementById('logoutBtn').style.display = 'block'
+}
+
 window.onload = function() {
+    // const userName = document.getElementById('loginBtn').value;
+    // let userName=
+    // document.getElementById('loginBtn').onclick = async function(event) {
+    //     event.preventDefault();
+    //     let result = await fetch('http://localhost:3000/users'+ userName, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-type': 'application/json',
+    //         },
+    //     }).then(response => response.json());
+
+
     if (sessionStorage.getItem('accessToken')) {
+        console.log(sessionStorage.getItem('accessToken'));
         displayHomePage();
-    } else {
+    // } else if(sessionStorage.getItem('accessToken')&& result.role==='member'){
+    //     // put some logic here to detect the user is a member then display
+        
+    //      displayHomePageForBuyer()
+         
+        
+    //     // purchasing cart for the member
+    }
+    else {
         displayLoginPage();
     }
 
@@ -58,21 +90,24 @@ window.onload = function() {
         }
     }
 }
-
+/**
+ 
 async function getProducts() {
-    let products = await fetch('http://localhost:3000/products/', {
+    let products = await fetch('http://localhost:3000/books/', {
         method: 'GET',
         headers: {
+            'Content-Type':'application/json',
             'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
         }
     }).then(response => response.json());
     products.forEach(prod => renderProduct(prod));
 }
 
+
 function renderProduct(prod) {
     const div = document.createElement('div');
     div.classList = 'col-lg-4';
-    div.id = prod.id;
+    div.id = prod._id;
     div.innerHTML = `<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
     <title>Placeholder</title>
     <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
@@ -82,36 +117,129 @@ function renderProduct(prod) {
     const h2 = document.createElement('h2');
     h2.textContent = prod.title;
 
-    const price = document.createElement('p');
-    price.textContent = prod.price;
+    const isbn = document.createElement('p');
+    isbn.textContent = prod.isbn;
 
-    const description = document.createElement('p');
-    description.textContent = prod.description;
+    const publishedDate = document.createElement('p');
+    publishedDate.textContent = prod.publishedDate;
+
+    const author = document.createElement('p');
+    author.textContent = prod.author;
 
     div.appendChild(h2);
-    div.appendChild(price);
-    div.appendChild(description);
+    div.appendChild(isbn);
+    div.appendChild(publishedDate);
+    div.appendChild(author);
 
     const actions = document.createElement('p');
     const updateBtn = document.createElement('a');
-    updateBtn.classList = 'btn btn-secondary';
+    updateBtn.classList = 'btn btn-info mx-2';
     updateBtn.textContent = 'UPDATE';
     updateBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        document.getElementById('product-heading').textContent = 'Edit Product';
+        document.getElementById('product-heading').textContent = 'Edit Book';
         document.getElementById('title').value = prod.title;
-        document.getElementById('price').value = prod.price;
-        document.getElementById('description').value = prod.description;
-        document.getElementById('product-btn').dataset.id = prod.id;
+        document.getElementById('isbn').value = prod.isbn;
+        document.getElementById('publishedDate').value = prod.publishedDate;
+        document.getElementById('author').value = prod.author;
+        document.getElementById('product-btn').dataset.id = prod._id;
+    });
+
+    const shopButton = document.createElement('a');
+    shopButton.classList = 'btn btn-danger';
+    shopButton.textContent = 'ADD TO CART';
+    shopButton.addEventListener('click', function(event) {
+        event.preventDefault();
+
+
+// we will fix this later
+        // if (!confirm("Are you sure, want to delete this book?")) {
+        //     return;
+        // }
+
+        fetch('http://localhost:3000/books/' + prod._id, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
+            }
+        }).then(response => {
+            alert('Delete Successfully!');
+            div.remove();
+        });
+    });
+
+    actions.appendChild(updateBtn);
+    actions.appendChild(deleteBtn);
+
+    div.appendChild(actions);
+
+    document.getElementById('products').appendChild(div);
+}
+
+ */
+async function getProducts() {
+    let products = await fetch('http://localhost:3000/books/', {
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
+        }
+    }).then(response => response.json());
+    products.forEach(prod => renderProduct(prod));
+}
+
+function renderProduct(prod) {
+    const div = document.createElement('div');
+    div.classList = 'col-lg-4';
+    div.id = prod._id;
+    div.innerHTML = `<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false">
+    <title>Placeholder</title>
+    <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
+        dy=".3em">140x140</text>
+    </svg>`;
+
+    const h2 = document.createElement('h2');
+    h2.textContent = prod.title;
+
+    const isbn = document.createElement('p');
+    isbn.textContent = prod.isbn;
+
+    const publishedDate = document.createElement('p');
+    publishedDate.textContent = prod.publishedDate;
+
+    const author = document.createElement('p');
+    author.textContent = prod.author;
+
+    div.appendChild(h2);
+    div.appendChild(isbn);
+    div.appendChild(publishedDate);
+    div.appendChild(author);
+
+    const actions = document.createElement('p');
+    const updateBtn = document.createElement('a');
+    updateBtn.classList = 'btn btn-info mx-2';
+    updateBtn.textContent = 'UPDATE';
+    updateBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('product-heading').textContent = 'Edit Book';
+        document.getElementById('title').value = prod.title;
+        document.getElementById('isbn').value = prod.isbn;
+        document.getElementById('publishedDate').value = prod.publishedDate;
+        document.getElementById('author').value = prod.author;
+        document.getElementById('product-btn').dataset.id = prod._id;
     });
 
     const deleteBtn = document.createElement('a');
-    deleteBtn.classList = 'btn btn-secondary';
+    deleteBtn.classList = 'btn btn-danger';
     deleteBtn.textContent = 'DELETE';
     deleteBtn.addEventListener('click', function(event) {
         event.preventDefault();
 
-        fetch('http://localhost:3000/products/' + prod.id, {
+        if (!confirm("Are you sure, want to delete this book?")) {
+            return;
+        }
+
+        fetch('http://localhost:3000/books/' + prod._id, {
             method: 'DELETE',
             headers: {
                 'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
@@ -132,7 +260,7 @@ function renderProduct(prod) {
 
 
 async function addProduct() {
-    let result = await fetch('http://localhost:3000/products/', {
+    let result = await fetch('http://localhost:3000/books/', {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
@@ -140,8 +268,9 @@ async function addProduct() {
         },
         body: JSON.stringify({
             title: document.getElementById('title').value,
-            price: document.getElementById('price').value,
-            description: document.getElementById('description').value
+            isbn: document.getElementById('isbn').value,
+            publishedDate: document.getElementById('publishedDate').value,
+            author: document.getElementById('author').value
         })
     }).then(res => res.json());
     document.getElementById('product-form').reset();
@@ -151,9 +280,10 @@ async function addProduct() {
 function editProduct() {
     const prodId = document.getElementById('product-btn').dataset.id;
     const title = document.getElementById('title').value;
-    const price = document.getElementById('price').value;
-    const description = document.getElementById('description').value;
-    fetch('http://localhost:3000/products/' + prodId, {
+    const isbn = document.getElementById('isbn').value;
+    const publishedDate = document.getElementById('publishedDate').value;
+    const author = document.getElementById('author').value;
+    fetch('http://localhost:3000/books/' + prodId, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -161,18 +291,21 @@ function editProduct() {
             },
             body: JSON.stringify({
                 title: title,
-                price: price,
-                description: description
+                isbn: isbn,
+                publishedDate: publishedDate,
+                author: author
             })
         }).then(response => response.json())
         .then(jsonObj => {
             const productDiv = document.getElementById(prodId);
             productDiv.querySelector('h2').textContent = title;
             const paragraphArr = productDiv.querySelectorAll('p');
-            paragraphArr[0].textContent = price;
-            paragraphArr[1].textContent = description;
+            paragraphArr[0].textContent = isbn;
+            paragraphArr[1].textContent = publishedDate;
+            paragraphArr[2].textContent = author;
 
-            document.getElementById('product-heading').textContent = 'Add a new Product';
+
+            document.getElementById('product-heading').textContent = 'Add a new Book';
             document.getElementById('product-btn').dataset.id = '';
             document.getElementById('product-form').reset();
         });

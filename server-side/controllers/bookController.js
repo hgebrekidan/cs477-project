@@ -1,26 +1,47 @@
-const Product = require('../models/book');
+const Book = require('../models/book');
 
-exports.getBooks = (req, res, next) => {
-    res.status(200).json();
+exports.getBooks = async(req, res, next) => {
+    try {
+        res.status(200).json(await Book.fetchAll().toArray());
+    } catch (error) {
+        next(error);
+    }
 }
 
-exports.getBookByISNB = (req, res, next) => {
-    res.status(200).json(Book.findByISNB(req.params.ISNB));
+exports.getBookById = async(req, res, next) => {
+    try {
+        res.status(200).json(await Book.findById(req.params.bookId));
+    } catch (error) {
+        next(error);
+    }
 }
 
-exports.save = (req, res, next) => {
-    const book = req.body;
-    const savedBook = new Book().save();
-    res.status(201).json(savedBook);
+exports.save = async(req, res, next) => {
+    try {
+        const book = req.body;
+        const savedBook = await new Book(null, book.title, book.isbn, book.publishedDate, book.author).save();
+        res.status(201).json(savedBook.ops[0]);
+    } catch (error) {
+        next(error);
+    }
 }
 
-exports.update = (req, res, next) => {
-    const book = req.body;
-    const updatedBook = new Book().update();
-    res.status(200).json(updatedBook);
+exports.update = async(req, res, next) => {
+    try {
+        const book = req.body;
+        const updatedBook = new Book(req.params.bookId, book.title, book.isbn, book.publishedDate, book.author);
+        await updatedBook.update();
+        res.status(200).json(updatedBook);
+    } catch (error) {
+        next(error);
+    }
 }
 
-exports.deleteByNSNB = (req, res, next) => {
-    Book.deleteByISNB(req.params.ISNB);
-    res.status(200).end();
+exports.deleteById = async(req, res, next) => {
+    try {
+        await Book.deleteById(req.params.bookId);
+        res.status(200).end();
+    } catch (error) {
+        next(error);
+    }
 }
