@@ -11,7 +11,7 @@ router.post('/signup', authController.signup);
 
 router.use(authController.authorize);
 
-console.log(authController.signup);
+ console.log(authController.signup);
 
 
 module.exports = router;
