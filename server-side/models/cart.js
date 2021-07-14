@@ -1,48 +1,28 @@
+const { ObjectID } = require("mongodb");
+const { getDb } = require("../utils/database");
+
 let cart = [];
 
 module.exports = class Cart {
 
-    static addProduct(id, productPrice) {
-        if (getDB().collection('cart').length == 0) {
-            getDB().collection('cart') = { products: [], totalPrice: 0 };
-        }
-        const existingProductIndex = getDB().collection('cart').products.findOne(prod => prod.id === id);
-        const existingProduct = cart.products[existingProductIndex];
-        let updatedProduct;
-
-        // Add new product/ increase quantity
-        if (existingProduct) {
-            updatedProduct = { ...existingProduct };
-            updatedProduct.qty = updatedProduct.qty + 1;
-            cart.products = [...cart.products];
-            cart.products[existingProductIndex] = updatedProduct;
-        } else {
-            updatedProduct = { id: id, qty: 1 };
-            cart.products = [...cart.products, updatedProduct];
-        }
-        cart.totalPrice = cart.totalPrice + +productPrice;
+    static save(data) {
+    return getDb().collection('cart').insertOne(data);
     }
-
-    static deleteProduct(id, productPrice) {
-        let updatedCart = cart;
-        const product = updatedCart.products.find(prod => prod.id === id);
-        if (!product) {
-            return;
-        }
-        const productQty = product.qty;
-        updatedCart.products = updatedCart.products.filter(
-            prod => prod.id !== id
-        );
-        updatedCart.totalPrice =
-            updatedCart.totalPrice - productPrice * productQty;
+    static findByuserName(username) {
+        return getDb().collection('cart').find({ username: username }).toArray();
     }
-
+    static findByid(id) {
+        return getDb().collection('cart').findOne({ _id: new ObjectID(id) })//.toArray();  
+    }
+    
     static getCart() {
-        return getDB().collection('cart').find();
+        return getDb().collection('cart').find();
     }
 
-    static isEmpty() {
-        return cart.length <= 0;
+    static delete(id) {
+        return getDb().collection('cart').deleteOne({ _id: new ObjectID(id)});
     }
-
+    static deletebyUsername(username) {
+        return getDb().collection('cart').delete({username: username});
+    }
 };
